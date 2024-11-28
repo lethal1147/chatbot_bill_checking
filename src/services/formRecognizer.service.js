@@ -1,7 +1,7 @@
-import {
+const {
   AzureKeyCredential,
   DocumentAnalysisClient,
-} from "@azure/ai-form-recognizer";
+} = require("@azure/ai-form-recognizer");
 
 const convertBase64ToBuffer = (base64Image) => {
   const base64Data = base64Image.replace(
@@ -12,7 +12,7 @@ const convertBase64ToBuffer = (base64Image) => {
   return buffer;
 };
 
-export const readMenuFromReceiptImage = async (image = "") => {
+const readMenuFromReceiptImage = async (image = "") => {
   try {
     let formUrl = image;
     const endpoint = process.env.AZURE_FORM_RECOGNIZER_ENDPOINT;
@@ -26,10 +26,12 @@ export const readMenuFromReceiptImage = async (image = "") => {
       endpoint,
       new AzureKeyCredential(key)
     );
-    const poller = await client.beginAnalyzeDocument("prebuilt-read", buffer);
+    const poller = await client.beginAnalyzeDocument("prebuilt-read", formUrl);
     const poll = await poller.pollUntilDone();
     return poll;
   } catch (err) {
     throw err;
   }
 };
+
+module.exports = { readMenuFromReceiptImage };

@@ -10,8 +10,9 @@
     "@azure/ai-form-recognizer": "^5.0.0",
     "@azure/functions": "^4.0.0",
     "axios": "^1.7.8",
+    "dayjs": "^1.11.13",
     "openai": "^4.73.1",
     "sqlite3": "^5.1.7"
   },
-  "main": "src/**/*.js}"
+  "main": "src/**/*.js"
 }

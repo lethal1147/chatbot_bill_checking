@@ -1,4 +1,4 @@
-export const COMPLETION_TEMPLATE = {
+const COMPLETION_TEMPLATE = {
   model: "gpt-4o",
   messages: [
     {
@@ -40,64 +40,14 @@ export const COMPLETION_TEMPLATE = {
       type: "function",
       function: {
         name: "check_menus_in_bill",
-        description: "Check menus in a bill by bill ID",
+        description: "Check menus in a bill by bill public id",
         parameters: {
           type: "object",
-          required: ["bill_id"],
+          required: ["bill_public_id"],
           properties: {
-            bill_id: {
+            bill_public_id: {
               type: "string",
               description: "Unique identifier for the bill",
-            },
-          },
-          additionalProperties: false,
-        },
-        strict: true,
-      },
-    },
-    {
-      type: "function",
-      function: {
-        name: "confirm_payment",
-        description:
-          "Inform that you have paid by passing your name and total.",
-        parameters: {
-          type: "object",
-          required: ["name", "total"],
-          properties: {
-            name: {
-              type: "string",
-              description: "The name of the person making the payment.",
-            },
-            total: {
-              type: "number",
-              description: "The total amount that has been paid.",
-            },
-          },
-          additionalProperties: false,
-        },
-        strict: true,
-      },
-    },
-    {
-      type: "function",
-      function: {
-        name: "check_paid_members",
-        description:
-          "Checks other members that already paid for the bill by giving bill id",
-        parameters: {
-          type: "object",
-          required: ["bill_id", "include_details"],
-          properties: {
-            bill_id: {
-              type: "string",
-              description:
-                "Unique identifier for the bill to check payment status",
-            },
-            include_details: {
-              type: "boolean",
-              description:
-                "Flag to include additional details about the members who paid",
             },
           },
           additionalProperties: false,
@@ -111,4 +61,41 @@ export const COMPLETION_TEMPLATE = {
   top_p: 1,
   frequency_penalty: 0,
   presence_penalty: 0,
+};
+
+const COMPLETION_TEMPLATE_FOR_SUBMIT_FORM_RECOGNIZER = {
+  model: "gpt-4o-mini",
+  messages: [
+    {
+      role: "system",
+      content: [
+        {
+          text: `You will be an helper AI that will receive an content text that is response from the ai-form-recognizer (azure).
+                  That AI will read the receipt's image, and return the text.
+  
+                  I want you to analyze the text content and return it as JSON.
+                  Return it in format follow this example : {error:false, menus:[{"name": "Tori Karaage", "quantity": "2", "netPrice": "196", "pricePerItem": "98"}]}.
+  
+                  If some menus is missing some data like netPrice or menuName, just exclude it.
+                  If you see that text content is not fit as the menus format, return as {error: true, menus: [], message: ""} and provide error message.
+                  PS. pricePerItem is coming from netPrice / quantity.
+                  `,
+          type: "text",
+        },
+      ],
+    },
+  ],
+  temperature: 0.3,
+  max_tokens: 5000,
+  top_p: 1,
+  frequency_penalty: 0,
+  presence_penalty: 0,
+  response_format: {
+    type: "text",
+  },
+};
+
+module.exports = {
+  COMPLETION_TEMPLATE,
+  COMPLETION_TEMPLATE_FOR_SUBMIT_FORM_RECOGNIZER,
 };

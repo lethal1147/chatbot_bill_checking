@@ -1,4 +1,7 @@
-export const getImageContent = async ({ messageId = "", returnType = "base64" }) => {
+const APIAxios = require("./axios.service");
+const LINE_REPLY_URL = "https://api.line.me/v2/bot/message/reply";
+
+const getImageContent = async ({ messageId = "", returnType = "base64" }) => {
   try {
     // LINE Messaging API endpoint สำหรับดึงรูปภาพ
     const url = `https://api-data.line.me/v2/bot/message/${messageId}/content`;
@@ -29,7 +32,7 @@ export const getImageContent = async ({ messageId = "", returnType = "base64" })
   }
 };
 
-export const getUserProfile = async (lineID) => {
+const getUserProfile = async (lineID) => {
   const headers = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${process.env?.CHANNEL_SECRET_TOKEN}`,
@@ -47,7 +50,7 @@ export const getUserProfile = async (lineID) => {
   };
 };
 
-export const replyMessage = async ({
+const replyMessage = async ({
   messageType = "flex",
   messageText = "",
   contents = {},
@@ -79,4 +82,10 @@ export const replyMessage = async ({
   } catch (error) {
     return { status: "fail", message: String(error) };
   }
+};
+
+module.exports = {
+  getUserProfile,
+  replyMessage,
+  getImageContent,
 };

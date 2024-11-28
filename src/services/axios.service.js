@@ -20,4 +20,4 @@ APIAxios.interceptors.response.use(
   }
 );
 
-export default APIAxios;
+module.exports = APIAxios;
